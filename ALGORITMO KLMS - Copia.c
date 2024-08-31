@@ -34,6 +34,27 @@ void imprime_teste(int *vetor,int tamanho)
     printf("\n\n");
 }
 
+// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+double calculo_e2(double e2, double e)
+{
+    e2 = e2 + (pow(e,2));
+
+    return e2;
+}
+
+
+//FUNÇÃO QUE CALCULA UM NOVO VALOR PARA O COEFICIENTE Wn
+double calculo_Wn(double Wn_n,double passo,double kw_n,double e)
+{
+    double aux, resultado;
+
+    aux = 2 * passo * kw_n * e;
+    resultado = Wn_n - aux;
+
+    return resultado;
+}
+
 // FUNÇÃO QUE CALCULA O ESCALAR d
 double calculo_d(double *Yn, double *Zn, int n)
 {
@@ -191,11 +212,8 @@ int main ()
 
     int M = 10;       // Tamanho de Vetor
     int N = 10;       // Numero de amostras - testando em um valor baixo
+
     double *dicionario;  // Vetor Dicionário
-    unsigned int seed;// Semente para valores aleatórios
-
-    //float n = 0.01; // Passo
-
     double *Un;          // Vetor de entrada
     double *Yn; // Vetor Exponencial
     double *Zn; // Vetor dos Ruídos
@@ -203,8 +221,9 @@ int main ()
     double *kw; // Vetor Kernel
     double dw;  // Valor escalar da minha saída estimada
     double d;   // Valor escalar desejado num instante n
-
-
+    double *e;
+    double passo = 0.01;
+    double *e2 = 0;
 
 
 
@@ -216,39 +235,50 @@ int main ()
     dicionario = cria_vetor_entrada(dicionario,2,M); // Criando o Vetor Dicionário
     Wn = cria_vetor_coeficiente(Wn,M);      // Criando Vetor de coeficientes inicializados com 0
     kw = cria_vetor_coeficiente(kw,M);      // Criando o vetor Kernel inicialmente zerado
+    e = cria_vetor_coeficiente(e,M);
+    e2 = cria_vetor_coeficiente(e2,M);
 
     for(int n=0; n<N; n++)
     {
         kw[n] = calculo_kw(Un,dicionario,n); // Calculando cada elemento do vetor Kernel
         dw = calculo_dw(Wn, kw[n], M);
         d = calculo_d(Yn,Zn,n);
+        e[n] = dw - d;
+        Wn[n] = calculo_Wn(Wn[n],passo,kw[n],e[n]);
     }
+
+    for (int n=0; n<N; n++)
+    {
+        e2[n] = calculo_e2(e2[n],e[n]);
+    }
+
+    // END FOR
 
 
     //printf("ENTRADA (UN):\n");
     //imprime_teste_1(Un,N);
     //printf("\n");
 
-    printf("Y(N):\n");
-    imprime_teste_1(Yn,N);
-    printf("\n");
+    //printf("Y(N):\n");
+    //imprime_teste_1(Yn,N);
+    //printf("\n");
 
 
-    printf("RUIDO:\n");
-    imprime_teste_2(Zn,N);
-    printf("\n");
+    //printf("RUIDO:\n");
+    //imprime_teste_2(Zn,N);
+    //printf("\n");
 
     //printf("DICIONARIO:\n");
     //imprime_teste_1(dicionario,M);
     //printf("\n");
 
-    //printf("COEFICIENTE:\n");
-    //imprime_teste_1(Wn,M);
-    //printf("\n");
-
-    printf("KERNEL:\n");
-    imprime_teste_1(kw,M);
+    printf("COEFICIENTE:\n");
+    imprime_teste_1(Wn,M);
     printf("\n");
+
+    //printf("KERNEL:\n");
+    //imprime_teste_1(kw,M);
+    //printf("\n");
 
     printf("Dw:\n");
     printf("%lf",dw);
@@ -256,5 +286,13 @@ int main ()
 
     printf("D:\n");
     printf("%0.7lf",d);
+    printf("\n");
+
+    printf("e:\n");
+    printf("%0.7lf",e);
+    printf("\n");
+
+    printf("e2:\n");
+    imprime_teste_1(e2,M);
     printf("\n");
 }
