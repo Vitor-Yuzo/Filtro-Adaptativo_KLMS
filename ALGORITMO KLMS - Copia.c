@@ -66,17 +66,21 @@ double calculo_d(double *Yn, double *Zn, int n)
 }
 
 // FUNÇÃO QUE CALCULA O ESCALAR dw
-double calculo_dw(double *Wn, double kwn, int tamanho)
+double calculo_dw(double *Wn, double *kw, int tamanho)
 {
-    int j;
+    int j,i;
     double dw = 0;
     double multiplicacao = 0;
 
-        for(j=0; j<tamanho; j++)
+    // REALIZANDO UM PRODUTO DE VETORES QUE RESULTA NUM ESCALAR Dw
+    for(j=0; j<tamanho; j++)
+    {
+        for(i=0; i<tamanho; i++)
         {
-            multiplicacao = kwn * Wn[j];
+            multiplicacao = kw[j] * Wn[i];
             dw = dw + multiplicacao;
         }
+    }
 
     return dw;
 }
@@ -93,8 +97,8 @@ double calculo_kw(double *vetor_Un, double *vetor_Dn, int n)
     double resultado;   // divido o numerado pelo denominador
     double kw_n;        // elevamos Oiler (e) ao resultado encontrado
 
-    printf("Un: %lf\n",vetor_Un[n]);
-    printf("Dn: %1f\n",vetor_Dn[n]);
+    //printf("Un: %lf\n",vetor_Un[n]);
+    //printf("Dn: %1f\n",vetor_Dn[n]);
 
     aux = (vetor_Un[n] - vetor_Dn[n]);
     aux_1 = pow(0.3,2);
@@ -106,12 +110,10 @@ double calculo_kw(double *vetor_Un, double *vetor_Dn, int n)
 
     kw_n = 1 / (exp(resultado));
 
-
-
-    printf("Numerador: %lf\n",numerador);
-    printf("Denominador: %lf\n",denominador);
-    printf("Resultado: %lf\n",resultado);
-    printf("Kw(n): %lf\n\n",kw_n);
+    //printf("Numerador: %lf\n",numerador);
+    //printf("Denominador: %lf\n",denominador);
+    //printf("Resultado: %lf\n",resultado);
+    //printf("Kw(n): %lf\n\n",kw_n);
 
     return kw_n;
 }
@@ -211,7 +213,7 @@ int main ()
     // Declarando Variáveis
 
     int M = 10;       // Tamanho de Vetor
-    int N = 10;       // Numero de amostras - testando em um valor baixo
+    int N = 100;       // Numero de amostras - testando em um valor baixo
 
     double *dicionario;  // Vetor Dicionário
     double *Un;          // Vetor de entrada
@@ -221,38 +223,54 @@ int main ()
     double *kw; // Vetor Kernel
     double dw;  // Valor escalar da minha saída estimada
     double d;   // Valor escalar desejado num instante n
-    double *e;
+    double e = 0;
     double passo = 0.01;
-    double *e2 = 0;
+    double e2 = 0;
+    double MSE;
 
 
 
-    //for 1
-
-    Un = cria_vetor_entrada(Un,10,N);       // Criando o vetor de entrada com valores aleatórios
-    Yn = operacao_exponencial(Un, Yn, N);   // Realizando a operção Exponencial y(n)
-    Zn = cria_vetor_ruido(Zn,1,N);          // Criando o vetor com os dados de ruido 10^(-5)
-    dicionario = cria_vetor_entrada(dicionario,2,M); // Criando o Vetor Dicionário
-    Wn = cria_vetor_coeficiente(Wn,M);      // Criando Vetor de coeficientes inicializados com 0
-    kw = cria_vetor_coeficiente(kw,M);      // Criando o vetor Kernel inicialmente zerado
-    e = cria_vetor_coeficiente(e,M);
-    e2 = cria_vetor_coeficiente(e2,M);
-
-    for(int n=0; n<N; n++)
+    for(int m=0; m<100; m++)
     {
-        kw[n] = calculo_kw(Un,dicionario,n); // Calculando cada elemento do vetor Kernel
-        dw = calculo_dw(Wn, kw[n], M);
-        d = calculo_d(Yn,Zn,n);
-        e[n] = dw - d;
-        Wn[n] = calculo_Wn(Wn[n],passo,kw[n],e[n]);
-    }
+        Un = cria_vetor_entrada(Un,10,N);       // Criando o vetor de entrada com valores aleatórios
+        Yn = operacao_exponencial(Un, Yn, N);   // Realizando a operção Exponencial y(n)
+        Zn = cria_vetor_ruido(Zn,1,N);          // Criando o vetor com os dados de ruido 10^(-5)
+        dicionario = cria_vetor_entrada(dicionario,2,M); // Criando o Vetor Dicionário
+        Wn = cria_vetor_coeficiente(Wn,M);      // Criando Vetor de coeficientes inicializados com 0
 
-    for (int n=0; n<N; n++)
-    {
-        e2[n] = calculo_e2(e2[n],e[n]);
-    }
+        for(int n=0; n<N; n++)
+        {
+            kw = cria_vetor_coeficiente(kw,M);      // Criando o vetor Kernel inicialmente zerado
 
-    // END FOR
+            // Calculando cada elemento do vetor Kernel
+            for(int i=0; i<M; i++)
+            {
+                kw[i] = calculo_kw(Un,dicionario,n);
+            }
+
+            dw = calculo_dw(Wn, kw, M); // Calculando o valor desejado Dw através de um produto escalar entre vetores
+            d = calculo_d(Yn,Zn,n);     // Calculando o valor de d
+            e = dw - d;                 // Calculando o erro
+
+            // Atualizando os valores do vetor de coeficientes Wn
+            for(int i=0; i<M; i++)
+            {
+                Wn[i] = calculo_Wn(Wn[i],passo,kw[i],e);
+            }
+
+            // ATUALIZAR DICIONÁRIO
+
+            free(kw);
+        }
+
+            e2 = calculo_e2(e2,e);
+
+            free(Un);
+            free(Yn);
+            free(Zn);
+            free(dicionario);
+            free(Wn);
+    }
 
 
     //printf("ENTRADA (UN):\n");
@@ -289,10 +307,12 @@ int main ()
     printf("\n");
 
     printf("e:\n");
-    printf("%0.7lf",e);
+    printf("%lf",e);
     printf("\n");
 
     printf("e2:\n");
-    imprime_teste_1(e2,M);
+    printf("%lf",e2);
     printf("\n");
+
+
 }
