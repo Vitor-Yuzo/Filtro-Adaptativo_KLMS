@@ -1,9 +1,7 @@
-#include <stdio.h>
-#include <math.h>
 #ifndef biblioteca_kernel
 #define biblioteca_kernel
 
-double kernel_gaussiano(double u, double u_linha, double eta)
+double *kernel_gaussiano(double *u, double *u_linha, double eta, int tamanho)
 {
     //DECLARANDO VARIÁVEIS
     double aux=0;         // Variável que guarda a subtração de u e u_linha
@@ -11,33 +9,41 @@ double kernel_gaussiano(double u, double u_linha, double eta)
     double numerador=0;   // Elevo a subtração ao quadrado
     double denominador=0; // Multiplico o valor de aux_1 por 2
     double resultado=0;   // divido o numerado pelo denominador
-    double kw=0;          // elevamos Oiler (e) ao resultado encontrado
+    double *kw;
 
-    aux = (u - u_linha);
-    aux_1 = pow(eta,2);
+    kw = (double *)malloc(tamanho * sizeof(double));
 
-    numerador = pow(aux,2);
-    denominador = aux_1 * 2;
+    for (int i=0; i<tamanho; i++)
+    {
+        aux = (u[i] - u_linha[i]);
+        aux_1 = pow(eta,2);
 
-    resultado = (numerador / denominador);
+        numerador = pow(aux,2);
+        denominador = aux_1 * 2;
 
-    kw = 1 / (exp(resultado));
+        resultado = (numerador / denominador);
+
+        kw[i] = 1 / (exp(resultado));
+    }
 
     return kw;
 }
 
-double kernel_laplaciano(double u, double u_linha, double eta)
+double *kernel_laplaciano(double *u, double *u_linha, double eta, int tamanho)
 {
     //DECLARANDO VARIÁVEIS
     double numerador=0;   // Elevo a subtração ao quadrado
     double resultado=0;   // dividir o numerado pelo denominador
-    double kw=0;          // elevamos Oiler (e) ao resultado encontrado
+    double *kw;          // elevamos Oiler (e) ao resultado encontrado
 
-    numerador = (u - u_linha);
+    kw = (double *)malloc(tamanho * sizeof(double));
 
-    resultado = (numerador / eta);
-
-    kw = 1 / (exp(resultado));
+    for (int i=0; i<tamanho; i++)
+    {
+        numerador = (u[i] - u_linha[i]);
+        resultado = (numerador / eta);
+        kw[i] = 1 / (exp(resultado));
+    }
 
     return kw;
 }
@@ -89,7 +95,7 @@ double kernel_sigmoidal(double *u, double *u_linha, double alfa, double c, int t
     }
 
     resultado_1 = alfa * soma;
-    resultado_2 = pow(resultado,beta);
+    resultado_2 = resultado_1 + c;
     kw = tanh(resultado_2);
 
     return kw;
