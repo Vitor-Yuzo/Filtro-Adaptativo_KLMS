@@ -5,7 +5,7 @@
 #include "biblioteca_kernel.h"
 #define PI 3.1415926536
 
-// FUN��O PARA VERIFICAR A CONSTRU��O DO VETOR
+// FUNCAO PARA VERIFICAR A CONSTRU��O DO VETOR
 void imprime_teste_2(double *vetor,int tamanho)
 {
     for (int i = 0; i < tamanho; i++)
@@ -15,7 +15,7 @@ void imprime_teste_2(double *vetor,int tamanho)
     }
 }
 
-// FUN��O PARA VERIFICAR A CONSTRU��O DO VETOR
+// FUNCAO PARA VERIFICAR A CONSTRU��O DO VETOR
 void imprime_teste_1(double *vetor,int tamanho)
 {
     for (int i = 0; i < tamanho; i++)
@@ -26,7 +26,7 @@ void imprime_teste_1(double *vetor,int tamanho)
     }
 }
 
-// FUN��O PARA VERIFICAR A CONSTRU��O DO VETOR
+// FUNCAO PARA VERIFICAR A CONSTRU��O DO VETOR
 void imprime_teste(int *vetor,int tamanho)
 {
     for (int i = 0; i < tamanho; i++)
@@ -40,7 +40,7 @@ void imprime_teste(int *vetor,int tamanho)
 
 // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-// Gerador de valores aleat�rios com distribui��o gaussiana
+// Gerador de valores aleatorios com distribuicao gaussiana
 double AWGN_generator()
     {/* Generates additive white Gaussian Noise samples with zero mean and a standard deviation of 1. */
 
@@ -112,7 +112,7 @@ double* calculo_sse(double *sse, double *e,int N)
 }
 
 
-//FUN��O QUE CALCULA UM NOVO VALOR PARA O COEFICIENTE Wn
+//FUNCAO QUE CALCULA UM NOVO VALOR PARA O COEFICIENTE Wn
 double *calculo_Wn(double *Wn,double passo,double *kw,double e,int M)
 {
     double aux, resultado;
@@ -127,7 +127,7 @@ double *calculo_Wn(double *Wn,double passo,double *kw,double e,int M)
     return Wn;
 }
 
-// FUN��O QUE CALCULA O ESCALAR d
+// FUNCAO QUE CALCULA O ESCALAR d
 double calculo_d(double *Yn, double *Zn, int n)
 {
     double d = 0;
@@ -137,7 +137,7 @@ double calculo_d(double *Yn, double *Zn, int n)
     return d;
 }
 
-// FUN��O QUE CALCULA O ESCALAR dw
+// FUNCAO QUE CALCULA O ESCALAR dw
 double calculo_dw(double *Wn, double *kw, int tamanho)
 {
     int j,i;
@@ -158,7 +158,7 @@ double calculo_dw(double *Wn, double *kw, int tamanho)
 }
 
 
-// FUN��O QUE CALCULA O kw(n)
+// FUNCAO QUE CALCULA O kw(n)
 double *calculo_kw(double *kw, double *vetor_Un, double *vetor_Dn, int n, int M, double eta)
 {
     double elemento_entrada[1];
@@ -184,7 +184,7 @@ double *calculo_kw(double *kw, double *vetor_Un, double *vetor_Dn, int n, int M,
     return kw;
 }
 
-// FUN��O QUE GERA O VETOR INICIAL DE COEFICIENTES COM 0 NAS POSI��ES
+// FUNCAO QUE GERA O VETOR INICIAL DE COEFICIENTES COM 0 NAS POSICOES
 double * cria_vetor_coeficiente(double *vetor, int tamanho)
 {
     vetor = (double *)malloc(tamanho * sizeof(double));
@@ -199,7 +199,7 @@ double * cria_vetor_coeficiente(double *vetor, int tamanho)
 
 }
 
-// GERANDO O VETOR DE RU�DO COM VALORES ALEAT�RIOS E PEQUENOS
+// GERANDO O VETOR DE RUIDO COM VALORES ALEATORIOS E PEQUENOS
 double * cria_vetor_ruido(double *vetor, int seed, int tamanho)
 {
     double valor;
@@ -207,7 +207,7 @@ double * cria_vetor_ruido(double *vetor, int seed, int tamanho)
     // Alocando vetor
     vetor = (double *)malloc(tamanho * sizeof(double));
 
-    // Gernando valores aleat�rios
+    // Gernando valores aleatorios
     srand(seed);
 
     // Preenchendo o vetor
@@ -221,7 +221,7 @@ double * cria_vetor_ruido(double *vetor, int seed, int tamanho)
 
 }
 
-// FUN��O QUE ATRIBUI OS VALORES DE y(n)
+// FUNCAO QUE ATRIBUI OS VALORES DE y(n)
 double * sinal_desejado(double *vetor_Un, double *vetor_Yn, int tamanho)
 {
     double f1 = 0;
@@ -258,24 +258,24 @@ double * sinal_desejado(double *vetor_Un, double *vetor_Yn, int tamanho)
     return vetor_Yn;
 }
 
-// FUN��O QUE CRIA VETOR DE ENTRADA COM VALORES ALEAT�RIOS
+// FUNCAO QUE CRIA VETOR DE ENTRADA COM VALORES ALEATORIOS
 int* cria_vetor_interio(int *vetor, int seed, int tamanho)
 {
     vetor = (int *)malloc(tamanho * sizeof(int));
 
-    // Gernando valores aleat�rios
+    // Gernando valores aleatorios
     srand(seed);
 
     // Preenchendo o vetor
     for (int i = 0; i < tamanho; i++)
     {
-        vetor[i]= rand() % 31; // Garantindo que ser�o valores aleatorios sejam de -1 a 1
+        vetor[i]= rand() % 31; // Garantindo que serao valores aleatorios sejam de -1 a 1
     }
 
     return vetor;
 }
 
-// FUN��O QUE CRIA VETOR DE ENTRADA COM VALORES ALEAT�RIOS
+// FUNCAO QUE CRIA VETOR DE ENTRADA COM VALORES ALEATORIOS
 double* cria_vetor_dicionario(double *vetor, int seed, int tamanho)
 {
     double valor;
@@ -295,7 +295,7 @@ double* cria_vetor_dicionario(double *vetor, int seed, int tamanho)
     return vetor;
 }
 
-// FUN��O QUE CRIA VETOR DE ENTRADA COM VALORES ALEAT�RIOS
+// FUNCAO QUE CRIA VETOR DE ENTRADA COM VALORES ALEAToRIOS
 double* cria_vetor_entrada(double *vetor, int seed, int tamanho)
 {
     double valor;
@@ -303,7 +303,7 @@ double* cria_vetor_entrada(double *vetor, int seed, int tamanho)
 
     vetor = (double *)malloc(tamanho * sizeof(double));
 
-    // Gernando valores aleat�rios
+    // Gernando valores aleatorios
     srand(seed);
 
     // Preenchendo o vetor
@@ -353,33 +353,31 @@ double *zera_kernel (double *kw, int tamanho)
     return kw;
 }
 
-// FUN��O PRINCIPAL
+// FUNCAO PRINCIPAL
 int main ()
 {
-    // Declarando Vari�veis
+    // Declarando Variaveis
 
-    int M = 5;       // Tamanho de Vetor
-    int N = 5000;       // Numero de amostras - testando em um valor baixo
+    int M = 5;          // Tamanho de Vetor: Kernel, Dicionário, Coeficientes
+    int N = 5000;       // Numero de amostras 
 
-    // PAR�METROS
+    // PARAMETROS
     double passo = 0.5;
     double eta = 0.0015;
 
-    //double taxa_decaimento = 0.99;
-    double *dicionario;  // Vetor Dicion�rio
-    double *Un;          // Vetor de entrada
-    double *Yn; // Vetor Exponencial
-    double *Zn; // Vetor dos Ru�dos
-    double *Wn; // Vetor Coeficientes
-    double *kw; // Vetor Kernel
-    double dw;  // Valor escalar da minha sa�da estimada
-    double d;   // Valor escalar desejado num instante n
-    double e = 0;
-    double *sse = NULL;
-    //double MSE;
-    double *salva_resultado;
+    double *dicionario; // Dicionario
+    double *Un;         // Amostras de entrada
+    double *Yn;         // Sinal Desejado (Valor Base)
+    double *Zn;         // Sinal Ruidoso
+    double *Wn;         // Coeficientes (Pesos)
+    double *kw;         // Kernel
+    double dw;          // Saida Estimada no instante n (Valor Escalar) 
+    double d;           // Sinal desejado no instante n (Valor Escalar)
+    double e = 0;       // Erro no instante n (Valor Escalar)
+    double *sse = NULL;         // Erro quadrático médio
+    double *salva_resultado;    // Vetor auxiliar
 
-    
+
     sse = cria_vetor_coeficiente(sse,N);
 
     FILE *arquivo = fopen("valores.csv", "w");
@@ -387,10 +385,10 @@ int main ()
 
     for(int m=0; m<100; m++)
     {
-        Un = cria_vetor_entrada(Un,10,N);                   // Criando o vetor de entrada com valores aleat�rios
-        Yn = sinal_desejado(Un, Yn, N);                     // Realizando a oper��o Exponencial y(n)
+        Un = cria_vetor_entrada(Un,10,N);                   // Criando o vetor de entrada com valores aleatorios
+        Yn = sinal_desejado(Un, Yn, N);                     // Realizando a operacao Exponencial y(n)
         Zn = cria_vetor_ruido(Zn,1,N);                      // Criando o vetor com os dados de ruido 10^(-5)
-        dicionario = cria_vetor_dicionario(dicionario,2,M); // Criando o Vetor Dicion�rio
+        dicionario = cria_vetor_dicionario(dicionario,2,M); // Criando o Vetor Dicionario
         Wn = cria_vetor_coeficiente(Wn,M);                  // Criando Vetor de coeficientes inicializados com 0
         salva_resultado = cria_vetor_coeficiente(salva_resultado,N);
         kw = cria_vetor_coeficiente(kw,M);      // Criando o vetor Kernel inicialmente zerado
@@ -398,11 +396,11 @@ int main ()
 
         for(int n=0; n<N; n++)
         {
-            kw = zera_kernel(kw,M);
-            kw = calculo_kw(kw,Un,dicionario,n,M,eta);  // Calculando todos os valores de Kernel atrav�s da intera��o dos valores de entrada e dicion�rio
-            dw = calculo_dw(Wn, kw, M);             // Calculando o valor desejado Dw atrav�s de um produto escalar entre vetores
-            d = calculo_d(Yn,Zn,n);                 // Calculando o valor de d
-            e = dw - d;                             // Calculando o erro
+            kw = zera_kernel(kw,M);                     // Zerando vetor kernel
+            kw = calculo_kw(kw,Un,dicionario,n,M,eta);  // Calculando todos os valores de Kernel atraves da interacao dos valores de entrada e dicionario
+            dw = calculo_dw(Wn, kw, M);                 // Calculando o valor desejado Dw atraves de um produto escalar entre vetores
+            d = calculo_d(Yn,Zn,n);                     // Calculando o valor de d
+            e = dw - d;                                 // Calculando o erro
             salva_resultado[n] = e;
             Wn = calculo_Wn(Wn,passo,kw,e,M);       // Atualizando os valores do vetor coeficiente
             dicionario = atualizar_dicionario(Un,dicionario,n,M); // Atualizando os valores do dicionario com os valores de entrada
