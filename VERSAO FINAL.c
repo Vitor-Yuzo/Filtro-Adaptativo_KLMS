@@ -187,8 +187,6 @@ double *calculo_kw(double *kw, double *vetor_Un, double *vetor_Dn, int n, int M,
 // FUNCAO QUE GERA O VETOR INICIAL DE COEFICIENTES COM 0 NAS POSICOES
 double * cria_vetor_coeficiente(double *vetor, int tamanho)
 {
-    vetor = (double *)malloc(tamanho * sizeof(double));
-
     // Preenchendo o vetor
     for (int i = 0; i < tamanho; i++)
     {
@@ -203,9 +201,6 @@ double * cria_vetor_coeficiente(double *vetor, int tamanho)
 double * cria_vetor_ruido(double *vetor, int seed, int tamanho)
 {
     double valor;
-
-    // Alocando vetor
-    vetor = (double *)malloc(tamanho * sizeof(double));
 
     // Gernando valores aleatorios
     srand(seed);
@@ -226,9 +221,6 @@ double * sinal_desejado(double *vetor_Un, double *vetor_Yn, int tamanho)
 {
     double f1 = 0;
     double f2 = 0;
-
-    // Alocando Dinamicamente
-    vetor_Yn = (double *)malloc(tamanho * sizeof(double));
 
     /*
     vetor_Yn[0] = sin(vetor_Un[0]);
@@ -280,8 +272,6 @@ double* cria_vetor_dicionario(double *vetor, int seed, int tamanho)
 {
     double valor;
 
-    vetor = (double *)malloc(tamanho * sizeof(double));
-
     // Gernando valores aleat�rios
     srand(seed);
 
@@ -299,9 +289,8 @@ double* cria_vetor_dicionario(double *vetor, int seed, int tamanho)
 double* cria_vetor_entrada(double *vetor, int seed, int tamanho)
 {
     double valor;
-    FILE *arquivo = fopen("vetor_entrada.txt", "w");
 
-    vetor = (double *)malloc(tamanho * sizeof(double));
+    FILE *arquivo = fopen("vetor_entrada.txt", "w");
 
     // Gernando valores aleatorios
     srand(seed);
@@ -353,6 +342,13 @@ double *zera_kernel (double *kw, int tamanho)
     return kw;
 }
 
+double *alocacao_dinamica(double *vetor, int tamanho)
+{
+    vetor = (double *)malloc(tamanho * sizeof(double));
+
+    return vetor;
+}
+
 // FUNCAO PRINCIPAL
 int main ()
 {
@@ -365,20 +361,29 @@ int main ()
     double passo = 0.5;
     double eta = 0.0015;
 
-    double *dicionario; // Dicionario
-    double *Un;         // Amostras de entrada
-    double *Yn;         // Sinal Desejado (Valor Base)
-    double *Zn;         // Sinal Ruidoso
-    double *Wn;         // Coeficientes (Pesos)
-    double *kw;         // Kernel
+    double *dicionario= NULL; // Dicionario
+    double *Un= NULL;         // Amostras de entrada
+    double *Yn= NULL;         // Sinal Desejado (Valor Base)
+    double *Zn= NULL;         // Sinal Ruidoso
+    double *Wn= NULL;         // Coeficientes (Pesos)
+    double *kw= NULL;         // Kernel
     double dw;          // Saida Estimada no instante n (Valor Escalar) 
     double d;           // Sinal desejado no instante n (Valor Escalar)
     double e = 0;       // Erro no instante n (Valor Escalar)
     double *sse = NULL;         // Erro quadrático médio
-    double *salva_resultado;    // Vetor auxiliar
+    double *salva_resultado= NULL;    // Vetor auxiliar
 
 
+    sse = alocacao_dinamica(sse,N);
     sse = cria_vetor_coeficiente(sse,N);
+
+    Un = alocacao_dinamica(Un,N);                   
+    Yn = alocacao_dinamica(Yn,N);                  
+    Zn = alocacao_dinamica(Zn,N);                     
+    dicionario = alocacao_dinamica(dicionario,M); 
+    Wn = alocacao_dinamica(Wn,M);                  
+    salva_resultado = alocacao_dinamica(salva_resultado,N);
+    kw = alocacao_dinamica(kw,M);      
 
     FILE *arquivo = fopen("valores.csv", "w");
     FILE *arquivo_txt = fopen("valores_txt.txt", "w");
